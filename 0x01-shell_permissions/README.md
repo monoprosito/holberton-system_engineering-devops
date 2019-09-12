@@ -9,3 +9,4 @@
 7. 6-multiple_permissions: This script adds execute permission to the owner and the group owner, and read permission to other users, to the file hello.
 8. 7-everybody: This script adds execution permission to the owner, the group owner and the other users to the file hello.
 9. 8-James_Bond: This script sets the permission to the file hello as James Bond.
+10. 9-John_Doe: This script sets the mode of the hello file as John Doe.
