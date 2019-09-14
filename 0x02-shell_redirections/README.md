@@ -7,3 +7,6 @@
 5. 4-lastlines: This script display the last 10 lines of /etc/passwd.
 6. 5-firstlines: This script display the first 10 lines of /etc/passwd.
 7. 6-third_line: This script displays the third line of the file iacta.
+8. 7-file: This script creates a file named exactly \*\\'"Holberton School"\'\\*$\?\*\*\*\*\*:) containing the text Holberton School ending by a new line.
+9. 8-cwd_state: This script writes into the file ls_cwd_content the result of the command ls -la. If the file ls_cwd_content already exists, it should be overwritten. If the file ls_cwd_content does not exist, create it.
+10. 9-duplicate_last_line: This script duplicates the last line of the file iacta.
