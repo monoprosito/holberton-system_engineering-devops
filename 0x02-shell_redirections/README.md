@@ -20,3 +20,6 @@
 18. 17-hidethisword: This script all the lines in the file /etc/passwd that do not contain the pattern "bin".
 19. 18-letteronly: This script display all lines of the file /etc/ssh/sshd_config starting with a letter, including capital letters as well.
 20. 19-AZ: This script replace all characters A and c from input to Z and e respectively.
+21. 20-hiago: This script removes all letters c and C from input.
+22. 21-reverse: This script reverse its input.
+23. 22-users_and_homes: This script displays all users and their home directories, sorted by users.
