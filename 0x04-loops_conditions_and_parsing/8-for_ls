@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Displays:
+#
+#   The content of the current directory
+#   In a list format
+#   Where only the part of the name after the first dash is displayed (refer to the example)
+ls > content
+curr_content=$(sed 's/[[:digit:]]\+-//' < content)
+
+for i in $curr_content ; do
+    echo "$i"
+done
