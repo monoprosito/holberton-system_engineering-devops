@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Kills 4-to_infinity_and_beyond process.
+PRID=$(pgrep -f 4-to_infinity_and_beyond)
+kill "$PRID"
