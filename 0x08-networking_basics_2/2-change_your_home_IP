@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Configures a Ubuntu server with specific IP addresses
+# to `localhost` and `facebook.com` hostname
+
+cp /etc/hosts ~/hosts.new
+sed -i s/^127.*localhost$/127.0.0.2\ localhost/ ~/hosts.new
+echo "8.8.8.8 facebook.com" >> ~/hosts.new
+cat ~/hosts.new > /etc/hosts
