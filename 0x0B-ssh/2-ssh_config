@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Custom client configuration file
+Host 98.98.98.98
+	User ubuntu
+	IdentityFile ~/.ssh/holberton
+	BatchMode yes
