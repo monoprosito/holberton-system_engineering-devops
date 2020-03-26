@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Install a nginx web server listening on port 80.
+#
+# Also, when querying nginx at its root / with a GET
+# request, it returns a page that contains the string
+# 'Holberton School'.
+#
+# Also, the script, configure a directive of the Nginx server
+# to redirect to another page with 301 HTTP Code
+#
+
+link="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+new_conf="server_name _;\n\trewrite ^/redirect_me/$ $link permanent;"
+
+apt update
+apt install -y nginx
+ufw allow 'Nginx HTTP'
+echo "Holberton School" > /var/www/html/index.html
+sed -i "s|server_name\ _;|$new_conf|" /etc/nginx/sites-available/default
+service nginx restart
