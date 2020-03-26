@@ -14,8 +14,8 @@
 
 link="https://www.youtube.com/watch?v=QH2-TGUlwu4"
 new_conf="server_name _;\n\trewrite ^/redirect_me/$ $link permanent;"
-location_error="location = /404.html {\n"
-error_directive="error_page 404 /404.html;\n\t\t$location_error"
+location_error="location = /404.html {\n\t\troot /var/www/html/;\n\t\tinternal;\n"
+error_directive="error_page 404 /404.html;\n\t$location_error"
 error_404="}\n\n\t$error_directive\t}"
 
 apt update
