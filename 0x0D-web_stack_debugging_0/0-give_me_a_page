@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Debug a server with Apache stopped
+service apache2 start
