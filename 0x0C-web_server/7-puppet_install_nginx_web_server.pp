@@ -8,11 +8,6 @@ exec { 'update packages':
   command => '/usr/bin/apt-get update'
 }
 
-exec { 'allow port 80':
-  command => "/usr/sbin/ufw allow 'Nginx HTTP'",
-  require => Package['nginx']
-}
-
 exec { 'restart nginx':
   command => '/usr/sbin/service nginx restart',
   require => Package['nginx']
@@ -20,7 +15,6 @@ exec { 'restart nginx':
 
 package { 'nginx':
   ensure  => 'installed',
-  notify  => Exec['allow port 80'],
   require => Exec['update packages']
 }
 
@@ -38,5 +32,6 @@ file_line { 'Set 301 redirection':
   path     => '/etc/nginx/sites-available/default',
   multiple => true,
   line     => $content,
-  notify   => Exec['restart nginx']
+  notify   => Exec['restart nginx'],
+  require  => File['/var/www/html/index.html']
 }
