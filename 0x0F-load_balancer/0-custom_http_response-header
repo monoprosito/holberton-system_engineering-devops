@@ -14,7 +14,7 @@
 # Configure Nginx so that its HTTP response contains
 # a custom header
 #
-# shellcheck disable=SC2059
+# shellcheck disable=SC2154
 
 link="https://www.youtube.com/watch?v=QH2-TGUlwu4"
 new_conf="server_name _;\n\trewrite ^/redirect_me/$ $link permanent;"
