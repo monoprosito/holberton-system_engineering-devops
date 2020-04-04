@@ -1,32 +1,22 @@
 #!/usr/bin/env bash
-# Configure Nginx so that its HTTP response contains a custom header
+# 
+# Configure Nginx so that its HTTP response contains
+# a custom header
 #
-# shellcheck disable=SC2154
-
-link="https://www.youtube.com/watch?v=QH2-TGUlwu4"
-new_conf="server_name _;\n\trewrite ^/redirect_me/$ $link permanent;"
-location_error="location = /404.html {\n\t\troot /var/www/html/;\n\t\tinternal;\n"
-error_directive="error_page 404 /404.html;\n\t$location_error"
-error_404="}\n\n\t$error_directive\t}"
-
-sudo apt update
-sudo apt install -y nginx
-sudo ufw allow 'Nginx HTTP'
-echo "Holberton School" | sudo tee /var/www/html/index.html
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
-sudo sed -i "s|server_name\ _;|$new_conf|" /etc/nginx/sites-available/default
-sudo sed -i "0,/}/ s|}|$error_404|" /etc/nginx/sites-available/default
-sudo nginx -s reload
 
 config_file="/etc/nginx/nginx.conf"
-header_key="X-Served-By"
-header_value="\$HOSTNAME"
-header="add_header $header_key $header_value;"
-search="http {"
-new_conf="$search\n\t$header"
 
-# Replace the value found with the new configuration
-sudo sed -i "s|$search|$new_conf|" $config_file
+if ! grep -q "add_header X-Served-By" $config_file;
+then
+    header_key="X-Served-By"
+    header_value="\$hostname"
+    header="add_header $header_key $header_value;"
+    search="http {"
+    new_conf="$search\n\t$header"
 
-# Restart Nginx Service
-sudo nginx -s reload
+    # Replace the value found with the new configuration
+    sudo sed -i "s|$search|$new_conf|" $config_file
+
+    # Restart Nginx Service
+    sudo nginx -s reload
+fi
