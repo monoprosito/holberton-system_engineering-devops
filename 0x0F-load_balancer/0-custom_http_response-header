@@ -1,5 +1,35 @@
 #!/usr/bin/env bash
-# Configure Nginx so that its HTTP response contains a custom header
+# Install a nginx web server listening on port 80.
+#
+# When querying nginx at its root / with a GET
+# request, it returns a page that contains the string
+# 'Holberton School'.
+#
+# Configures a directive of the Nginx server
+# to redirect to another page with 301 HTTP Code
+#
+# Configures a custom 404 page that contains the string
+# 'Ceci n'est pas une page'.
+# 
+# Configure Nginx so that its HTTP response contains
+# a custom header
+#
+# shellcheck disable=SC2059
+
+link="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+new_conf="server_name _;\n\trewrite ^/redirect_me/$ $link permanent;"
+location_error="location = /404.html {\n\t\troot /var/www/html/;\n\t\tinternal;\n"
+error_directive="error_page 404 /404.html;\n\t$location_error"
+error_404="}\n\n\t$error_directive\t}"
+
+sudo apt update
+sudo apt install -y nginx
+sudo ufw allow 'Nginx HTTP'
+echo "Holberton School" > /var/www/html/index.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+sudo sed -i "s|server_name\ _;|$new_conf|" /etc/nginx/sites-available/default
+sudo sed -i "0,/}/ s|}|$error_404|" /etc/nginx/sites-available/default
+sudo nginx -s reload
 
 config_file="/etc/nginx/nginx.conf"
 
