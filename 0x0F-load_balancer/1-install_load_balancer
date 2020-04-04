@@ -4,40 +4,16 @@
 # a custom header
 #
 
-link="https://www.youtube.com/watch?v=QH2-TGUlwu4"
-new_conf="server_name _;\n\trewrite ^/redirect_me/$ $link permanent;"
-location_error="location = /404.html {\n\t\troot /var/www/html/;\n\t\tinternal;\n"
-error_directive="error_page 404 /404.html;\n\t$location_error"
-error_404="}\n\n\t$error_directive\t}"
-
+# Update packages
 sudo apt update
-sudo apt install -y nginx
-sudo ufw allow 'Nginx HTTP'
-echo "Holberton School" | sudo tee /var/www/html/index.html
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
-sudo sed -i "s|server_name\ _;|$new_conf|" /etc/nginx/sites-available/default
-sudo sed -i "0,/}/ s|}|$error_404|" /etc/nginx/sites-available/default
-sudo service nginx restart
 
-config_file="/etc/nginx/nginx.conf"
-
-if ! sudo grep -q "add_header X-Served-By" $config_file;
-then
-    header_key="X-Served-By"
-    header_value="\$hostname"
-    header="add_header $header_key $header_value;"
-    search="http {"
-    new_conf="$search\n\t$header"
-
-    # Replace the value found with the new configuration
-    sudo sed -i "s|$search|$new_conf|" $config_file
-
-    # Restart Nginx Service
-    sudo service nginx restart
-fi
+# Add HAProxy PPA
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:vbernat/haproxy-1.8 -y
+sudo apt update
 
 # Install HAProxy
-sudo apt install -y haproxy=1.6.\*
+sudo apt install -y haproxy=1.8.\*
 
 hgproxy_conf_file="/etc/haproxy/haproxy.cfg"
 
