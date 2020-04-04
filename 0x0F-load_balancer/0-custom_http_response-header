@@ -2,6 +2,7 @@
 # Configure Nginx so that its HTTP response contains
 # a custom header
 #
+# shellcheck disable=SC2154
 
 config_file="/etc/nginx/nginx.conf"
 
