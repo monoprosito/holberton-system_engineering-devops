@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# 
+# Install and configure HAproxy with roundrobin
+#
+
+link="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+new_conf="server_name _;\n\trewrite ^/redirect_me/$ $link permanent;"
+location_error="location = /404.html {\n\t\troot /var/www/html/;\n\t\tinternal;\n"
+error_directive="error_page 404 /404.html;\n\t$location_error"
+error_404="}\n\n\t$error_directive\t}"
+
+sudo apt update
+sudo apt install -y nginx
+sudo ufw allow 'Nginx HTTP'
+echo "Holberton School" | sudo tee /var/www/html/index.html
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+sudo sed -i "s|server_name\ _;|$new_conf|" /etc/nginx/sites-available/default
+sudo sed -i "0,/}/ s|}|$error_404|" /etc/nginx/sites-available/default
+sudo service nginx restart
+
+config_file="/etc/nginx/nginx.conf"
+
+if ! sudo grep -q "add_header X-Served-By" $config_file;
+then
+    header_key="X-Served-By"
+    header_value="\$hostname"
+    header="add_header $header_key $header_value;"
+    search="http {"
+    new_conf="$search\n\t$header"
+
+    # Replace the value found with the new configuration
+    sudo sed -i "s|$search|$new_conf|" $config_file
+
+    # Restart Nginx Service
+    sudo service nginx restart
+fi
+
+# Install HAProxy
+sudo apt install -y haproxy=1.6.\*
+
+hgproxy_conf_file="/etc/haproxy/haproxy.cfg"
+
+# Configure Load Balancer
+printf "\nfrontend http\n\t\
+bind *:80\n\t\
+mode http\n\t\
+default_backend web-backend\n" | sudo tee -a $hgproxy_conf_file
+
+printf "\nbackend web-backend\n\t\
+balance roundrobin\n\t\
+server web1 35.229.93.37:80 check\n\t\
+server web2 54.196.213.127:80 check\n" | sudo tee -a $hgproxy_conf_file
+
+# Restart HAProxy
+sudo service haproxy restart
