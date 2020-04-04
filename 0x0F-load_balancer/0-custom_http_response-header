@@ -1,22 +1,17 @@
 #!/usr/bin/env bash
-# Configure Nginx so that its HTTP response contains
-# a custom header
+# Configure Nginx so that its HTTP response contains a custom header
 #
 # shellcheck disable=SC2154
 
 config_file="/etc/nginx/nginx.conf"
+header_key="X-Served-By"
+header_value="\$HOSTNAME"
+header="add_header $header_key $header_value;"
+search="http {"
+new_conf="$search\n\t$header"
 
-if ! grep -q "add_header X-Served-By" $config_file;
-then
-    header_key="X-Served-By"
-    header_value="\"$HOSTNAME\""
-    header="add_header $header_key $header_value;"
-    search="http {"
-    new_conf="$search\n\t$header"
+# Replace the value found with the new configuration
+sudo sed -i "s|$search|$new_conf|" $config_file
 
-    # Replace the value found with the new configuration
-    sudo sed -i "s|$search|$new_conf|" $config_file
-
-    # Restart Nginx Service
-    sudo nginx -s reload
-fi
+# Restart Nginx Service
+sudo nginx -s reload
