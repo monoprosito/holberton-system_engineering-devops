@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Generates a MySQL dump with all databases
+# and creates a compressed archive out of it.
+
+if [ "$1" ] ; then
+    touch .mylogin.cnf
+    printf "[client]\nuser = %s\npassword = %s" "root" "$1" >> .mylogin.cnf
+    chmod 600 .mylogin.cnf
+    mysqldump --defaults-extra-file=.mylogin.cnf --all-databases > backup.sql
+    tar -czvf "$(date '+%d-%m-%Y').tar.gz" backup.sql
+fi
