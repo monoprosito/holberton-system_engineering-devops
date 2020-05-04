@@ -41,4 +41,4 @@ if __name__ == '__main__':
     # Printing completed tasks
     for elem in res:
         if elem['completed'] is True:
-            print('\t ', elem['title'])
+            print('\t', elem['title'])
