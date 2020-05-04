@@ -7,8 +7,12 @@ from sys import argv
 import requests
 
 if __name__ == '__main__':
+    try:
+        emp_id = int(argv[1])
+    except ValueError:
+        exit()
+
     api_url = 'https://jsonplaceholder.typicode.com'
-    emp_id = argv[1]
     user_uri = '{api}/users/{id}'.format(api=api_url, id=emp_id)
     todo_uri = '{user_uri}/todos'.format(user_uri=user_uri)
 
