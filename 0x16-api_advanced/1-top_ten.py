@@ -29,12 +29,15 @@ def top_ten(subreddit):
 
     # Checks if the subreddit is invalid
     if res.status_code in [302, 404]:
-        print(None)
-        exit()
+        print('None')
+    else:
+        res_json = res.json()
 
-    # Get the 10 hot posts of the subreddit
-    hot_posts = res.json().get('data').get('children')
+        if res_json.get('data') and res_json.get('data').get('children'):
+            # Get the 10 hot posts of the subreddit
+            hot_posts = res_json.get('data').get('children')
 
-    # Print each hot post title
-    for post in hot_posts:
-        print(post.get('data').get('title'))
+            # Print each hot post title
+            for post in hot_posts:
+                if post.get('data') and post.get('data').get('title'):
+                    print(post.get('data').get('title'))
