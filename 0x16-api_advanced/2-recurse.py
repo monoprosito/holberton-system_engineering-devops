@@ -24,7 +24,7 @@ def recurse(subreddit, hot_list=[], after=''):
     user_agent = {'User-Agent': 'Python/requests'}
 
     # Set the Query Strings to Request
-    payload = {'after': after}
+    payload = {'after': after, 'limit': '100'}
 
     # Get the Response of the Reddit API
     res = requests.get(api_uri, headers=user_agent,
@@ -33,22 +33,17 @@ def recurse(subreddit, hot_list=[], after=''):
     # Checks if the subreddit is invalid
     if res.status_code == 200:
         res = res.json()
+        hot_posts = res.get('data').get('children')
+        after = res.get('data').get('after')
 
-        if res.get('data') and res.get('data').get('children'):
-            hot_posts = res.get('data').get('children')
+        # Print each hot post title
+        for post in hot_posts:
+            hot_list.append(post.get('data').get('title'))
 
-            if res.get('data') and res.get('data').get('after'):
-                after = res.get('data').get('after')
+        # Get the next page of hot posts
+        if after is not None:
+            recurse(subreddit, hot_list, after)
 
-            # Print each hot post title
-            for post in hot_posts:
-                if post.get('data') and post.get('data').get('title'):
-                    hot_list.append(post.get('data').get('title'))
-
-            # Get the next page of hot posts
-            if after is not None:
-                recurse(subreddit, hot_list, after)
-
-            return hot_list
+        return hot_list
 
     return None
